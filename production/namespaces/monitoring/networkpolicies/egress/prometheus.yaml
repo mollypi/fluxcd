@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-prometheus
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app: prometheus
+  egress:
+  # Apiserver
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+
+  # Node exporter and Kubelet
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/16
+    ports:
+    - protocol: TCP
+      port: 9100
+    - protocol: TCP
+      port: 10250
+  
+  # All pods (non-hostnetwork)
+  - to:
+    - namespaceSelector: {}
+
+  policyTypes:
+  - Egress

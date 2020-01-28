@@ -1,0 +1,18 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: etcd-operator
+  namespace: vitess
+spec:
+  releaseName: etcd-operator
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: etcd-operator
+    version: 0.10.2
+  values:
+    rbac: 
+      create: true
+
+    serviceAccount:
+      name: etcd-operator

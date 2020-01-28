@@ -1,0 +1,54 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: consul
+  namespace: consul
+spec:
+  releaseName: consul
+  chart:
+    git: https://github.com/hashicorp/consul-helm
+    path: .
+    ref: v0.16.0
+  values:
+    global:
+      image: consul:1.5.2
+      gossipEncryption:
+        secretName: consul-gossip-key
+        secretKey: encrypt-key
+    server:
+      annotations: |-
+        com.charleswhrowe.elastic.index: consul
+      extraConfig: |-
+        {
+          "telemetry": {
+            "prometheus_retention_time": "10m",
+            "dogstatsd_addr": "telegraf.monitoring.svc:8125"
+          }
+        }
+      resources: |
+        requests:
+          cpu: 50m
+          memory: 200Mi
+        limits:
+          cpu: 200m
+          memory: 200Mi
+
+    client:
+      annotations: |-
+        com.charleswhrowe.elastic.index: consul
+      extraConfig: |-
+        {
+          "telemetry": {
+            "prometheus_retention_time": "10m",
+            "dogstatsd_addr": "telegraf.monitoring.svc:8125"
+          }
+        }
+
+      resources: |
+        requests:
+          cpu: 50m
+          memory: 100Mi
+        limits:
+          cpu: 100m
+          memory: 100Mi

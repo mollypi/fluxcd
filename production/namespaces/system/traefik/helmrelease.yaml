@@ -1,0 +1,59 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: system
+spec:
+  releaseName: traefik
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: traefik
+    version: 1.77.1
+  values:
+    rbac:
+      enabled: true
+    externalTrafficPolicy: Local
+    kubernetes:
+      ingressClass: traefik
+      ingressEndpoint:
+        useDefaultPublishedService: true
+    deployment:
+      podAnnotations:
+        co.elastic.logs.traefik/processors.decode_json_fields.fields.0: message
+        co.elastic.logs.traefik/processors.decode_json_fields.target: traefik
+        com.charleswhrowe.elastic.index: traefik
+    ssl:
+      enabled: true
+      enforce: true
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 100Mi
+      limits:
+        cpu: 500m
+        memory: 500Mi    
+
+    accessLogs:
+      enabled: true
+      format: json
+      fields:
+        defaultMode: keep
+        names:
+          ClientUsername: drop
+        headers:
+          defaultMode: keep
+          names:
+            Authorization: drop
+
+    dashboard:
+      enabled: false    
+
+    metrics:
+      prometheus: 
+        enabled: true
+        restrictAccess: false
+        buckets: [0.1,0.3,0.5,0.8,1.2,2.5,5]
+      serviceMonitor:
+        enabled: true

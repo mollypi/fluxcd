@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit-pod
+  namespace: monitoring
+spec:
+  limits:
+  - max:
+      cpu: 2000m
+      memory: 2Gi
+    min:
+      cpu: 10m
+      memory: 32Mi
+    type: Pod

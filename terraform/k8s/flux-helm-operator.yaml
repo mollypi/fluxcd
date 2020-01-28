@@ -1,0 +1,25 @@
+
+rbac:
+  create: true
+
+createCRD: true
+
+helm:
+  versions: v3
+
+workers: 5
+# logReleaseDiffs: true
+
+podAnnotations:
+  com.charleswhrowe.elastic.index: helm-operator
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+  limits:
+    cpu: 1500m
+    memory: 2048Mi
+
+prometheus:
+  enabled: true

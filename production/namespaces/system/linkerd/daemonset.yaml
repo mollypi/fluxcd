@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: linkerd
+  namespace: system
+  labels:
+    app: linkerd
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: linkerd
+    spec:
+      containers:
+      - name: linkerd
+        image: buoyantio/linkerd:1.4.6
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        args:
+        - /io.buoyant/linkerd/config/config.yaml
+        ports:
+        - name: outgoing
+          containerPort: 4140
+          hostPort: 4140
+        - name: incoming
+          containerPort: 4141
+          hostPort: 4141
+        - name: admin
+          containerPort: 9990
+        volumeMounts:
+        - name: linkerd
+          mountPath: "/io.buoyant/linkerd/config"
+          readOnly: true
+
+      - name: kubectl
+        image: buoyantio/kubectl:v1.12.2
+        args:
+        - "proxy"
+        - "-p"
+        - "8001"
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      serviceAccount: linkerd
+      volumes:
+      - name: linkerd
+        configMap:
+          name: linkerd

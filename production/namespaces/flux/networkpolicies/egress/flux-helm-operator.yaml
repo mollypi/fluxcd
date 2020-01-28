@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-flux-helm-operator
+  namespace: flux
+spec:
+  podSelector: 
+    matchLabels:
+      app: helm-operator
+  egress:
+  # Apiserver
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+
+  # Internet for helm/git chart repositories
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+          - 10.0.0.0/8
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 22
+  policyTypes:
+  - Egress

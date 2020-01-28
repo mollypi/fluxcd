@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-traefik
+  namespace: system
+spec:
+  podSelector: 
+    matchLabels:
+      app: traefik
+  egress:
+  # Apiserver
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+  
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: alertmanager
+    ports:
+    - protocol: TCP
+      port: 9093
+
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9090
+
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+      podSelector:
+        matchLabels:
+          app: kibana
+    ports:
+    - protocol: TCP
+      port: 5601
+
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: flux
+      podSelector:
+        matchLabels:
+          app: flux
+    ports:
+    - protocol: TCP
+      port: 8080
+  policyTypes:
+  - Egress

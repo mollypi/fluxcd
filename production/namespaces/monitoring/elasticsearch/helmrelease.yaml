@@ -1,0 +1,37 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: elasticsearch
+  namespace: monitoring
+spec:
+  releaseName: elasticsearch
+  chart:
+    repository: https://helm.elastic.co
+    name: elasticsearch
+    version: 7.5.1
+  values:
+    replicas: "3"
+    esJavaOpts: -Xmx512m -Xms512m
+
+    podAnnotations:
+      co.elastic.logs.elasticsearch/multiline.pattern: ^{
+      co.elastic.logs.elasticsearch/multiline.negate: "true"
+      co.elastic.logs.elasticsearch/multiline.match: after
+      co.elastic.logs.elasticsearch/processors.decode_json_fields.fields.0: message
+      co.elastic.logs.elasticsearch/processors.decode_json_fields.target: elasticsearch
+      com.charleswhrowe.elastic.index: elasticsearch
+
+    volumeClaimTemplate:
+      # storageClassName: local-scsi
+      resources:
+        requests:
+          storage: 5Gi
+
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 1Gi

@@ -1,0 +1,4 @@
+fluxRecvVersion: 1
+endpoints:
+- keyPath: github.key
+  source: GitHub

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-telegraf
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: telegraf
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: influxdb
+    ports:
+    - protocol: TCP
+      port: 8086
+  policyTypes:
+  - Egress

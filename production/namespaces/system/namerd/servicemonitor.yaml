@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: namerd
+  namespace: system
+  label:
+    app: namerd
+spec:
+  jobLabel: namerd
+  namespaceSelector:
+    matchNames:
+    - system
+  selector:
+    matchLabels:
+      app: namerd
+  endpoints:
+  - targetPort: 9991
+    path: /admin/metrics/prometheus
+    scheme: http

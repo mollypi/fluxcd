@@ -1,0 +1,46 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: kibana
+  namespace: monitoring
+spec:
+  releaseName: kibana
+  chart:
+    repository: https://helm.elastic.co
+    name: kibana
+    version: 7.5.1
+  values:
+    replicas: 1
+
+    podAnnotations:
+      co.elastic.logs.kibana/processors.decode_json_fields.fields.0: message
+      co.elastic.logs.kibana/processors.decode_json_fields.target: kibana
+      com.charleswhrowe.elastic.index: kibana
+
+    # service:
+    #   annotations:
+    #     cloud.google.com/neg: '{"ingress": true}'
+    #     beta.cloud.google.com/backend-config: '{"ports": {"5601":"cloud-armor-ingress"}}'
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+      # path: /*
+      path: /
+      hosts: 
+      - kibana.charleswhrowe.com
+      tls:
+      - hosts:
+        - kibana.charleswhrowe.com
+        secretName: kibana-tls
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 1Gi
+      limits:
+        cpu: 500m
+        memory: 1Gi

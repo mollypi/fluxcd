@@ -1,0 +1,65 @@
+rbac:
+  create: true
+
+image:
+  repository: docker.io/fluxcd/flux-prerelease
+  tag: master-a144686f
+  # tag: 1.17.1
+
+git:
+  url: git@github.com:rowecharles/fluxcd.git
+  branch: master
+  path: production
+  readonly: true
+  pollInterval: 5m
+  secretName: flux-ssh
+
+sync:
+  interval: 5m
+
+syncGarbageCollection:
+  enabled: true
+
+additionalArgs:
+- --sops
+- --registry-scanning=false
+
+annotations:
+  com.charleswhrowe.elastic.index: flux
+
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: fluxcd@ck-gcp-training.iam.gserviceaccount.com
+
+# Flux recv
+extraContainers:
+- name: recv
+  image: fluxcd/flux-recv:0.3.0
+  imagePullPolicy: IfNotPresent
+  args:
+  - --config=/etc/fluxrecv/fluxrecv.yaml
+  ports:
+  - containerPort: 8080
+  volumeMounts:
+  - name: fluxrecv-config
+    mountPath: /etc/fluxrecv
+
+extraVolumes:
+- name: fluxrecv-config
+  secret:
+    secretName: fluxrecv-config
+    defaultMode: 0400
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+memcached:
+  enabled: false
+
+prometheus:
+  enabled: true

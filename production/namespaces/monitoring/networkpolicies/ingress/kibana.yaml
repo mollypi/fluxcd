@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-kibana
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app: kibana
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: system
+      podSelector:
+        matchLabels:
+          app: traefik
+    ports:
+    - protocol: TCP
+      port: 5601
+  policyTypes:
+  - Ingress

@@ -1,0 +1,59 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: velero
+  namespace: system
+spec:
+  releaseName: velero
+  chart:
+    repository: https://vmware-tanzu.github.io/helm-charts
+    name: velero
+    version: 2.8.1
+  values:
+    rbac:
+      create: true
+
+    serviceAccount:
+      server:
+        annotations: 
+          serviceAccount: velero@ck-gcp-training.iam.gserviceaccount.com
+
+    configuration:
+      provider: velero.io/gcp
+      backupStorageLocation:
+        name: gcp
+        bucket: fluxing
+        config:
+          serviceAccount: velero@ck-gcp-training.iam.gserviceaccount.com
+    credentials:
+      useSecret: false
+
+    snapshotsEnabled: false
+    schedules:
+      daily:
+        schedule: "0 0 * * *"
+        template:
+          ttl: "240h"
+          includedNamespaces:
+          - '*'
+
+    initContainers: 
+    - name: velero-plugin-for-gcp
+      image: velero/velero-plugin-for-gcp:v1.0.0
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - mountPath: /target
+          name: plugins
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 50Mi
+      limits:
+        cpu: 200m
+        memory: 200Mi    
+
+    metrics:
+      serviceMonitor:
+        enabled: true

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-telegraf
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: telegraf
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: consul
+      podSelector:
+        matchLabels:
+          app: consul
+    ports:
+    - protocol: UDP
+      port: 8125
+  policyTypes:
+  - Ingress

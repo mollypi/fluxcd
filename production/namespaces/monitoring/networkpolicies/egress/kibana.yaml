@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-kibana
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app: kibana
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: elasticsearch-master
+    ports:
+    - protocol: TCP
+      port: 9200
+  policyTypes:
+  - Egress

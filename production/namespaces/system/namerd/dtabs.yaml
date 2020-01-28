@@ -1,0 +1,8 @@
+apiVersion: l5d.io/v1alpha1
+kind: DTab
+metadata:
+  name: httproutes
+  namespace: system
+dentries:
+- dst: /#/http-kube-mesh-namer
+  prefix: /http-kube-mesh/%/io.l5d.k8s.daemonset/*/*/*/#/http-kube-local-namer

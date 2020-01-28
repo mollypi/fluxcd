@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-vault-agent-injector
+  namespace: consul
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/name: vault-agent-injector
+  ingress:
+  # Apiserver
+  - from:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+      - protocol: TCP
+        port: 8080
+  policyTypes:
+  - Ingress

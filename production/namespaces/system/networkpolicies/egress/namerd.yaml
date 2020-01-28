@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-namerd
+  namespace: system
+spec:
+  podSelector: 
+    matchLabels:
+      app: namerd
+  egress:
+  # Apiserver
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+  policyTypes:
+  - Egress

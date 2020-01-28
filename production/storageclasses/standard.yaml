@@ -1,0 +1,11 @@
+# Required to update standard storage class automatically added 
+# to GKE to no longer default.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard

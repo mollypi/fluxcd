@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: vault
+  namespace: consul
+  label:
+    app: vault
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: vault
+  endpoints:
+  - port: http
+    path: /v1/sys/metrics
+    params:
+      format: 
+      - prometheus
+    scheme: http
+    bearerTokenFile: '/vault/secrets/.vault-token'

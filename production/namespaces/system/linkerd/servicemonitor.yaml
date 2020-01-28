@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: linkerd
+  namespace: system
+  label:
+    app: linkerd
+spec:
+  jobLabel: linkerd
+  namespaceSelector:
+    matchNames:
+    - system
+  selector:
+    matchLabels:
+      app: linkerd
+  endpoints:
+  - targetPort: 9990
+    path: /admin/metrics/prometheus
+    scheme: http

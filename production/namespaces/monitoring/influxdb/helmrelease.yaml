@@ -1,0 +1,20 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: influxdb
+  namespace: monitoring
+spec:
+  releaseName: influxdb
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: influxdb
+    version: 3.0.1
+  values:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+      limits:
+        cpu: 500m
+        memory: 200Mi

@@ -1,0 +1,59 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: filebeat
+  namespace: monitoring
+spec:
+  releaseName: filebeat
+  chart:
+    repository: https://helm.elastic.co
+    name: filebeat
+    version: 7.5.1
+  values:
+    podAnnotations:
+      co.elastic.logs.filebeat/processors.decode_json_fields.fields.0: message
+      co.elastic.logs.filebeat/processors.decode_json_fields.target: filebeat
+      com.charleswhrowe.elastic.index: filebeat
+
+    extraVolumes: 
+     - name: varlog
+       hostPath:
+         path: /var/log
+
+    extraVolumeMounts: 
+     - name: varlog
+       mountPath: /var/log
+       readOnly: true
+
+    filebeatConfig:
+      filebeat.yml: |
+        logging.json: true
+
+        filebeat.inputs:
+        - type: log
+          paths:
+          - /var/log/kube-proxy.log
+
+        filebeat.autodiscover:
+          providers:
+          - type: kubernetes
+            include_annotations:
+            - com.charleswhrowe.elastic.index
+            - com.charleswhrowe.elastic.pipeline
+            hints.enabled: true
+            # CRI-O path
+            hints.default_config:
+              type: container
+              paths: /var/log/pods/*_${data.kubernetes.pod.uid}/${data.kubernetes.container.name}/*.log
+
+        output.elasticsearch:
+          hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
+          indices:
+          - index: "k8s-%{[kubernetes.annotations.com_charleswhrowe_elastic_index]}-%{+yyyy.MM.dd}"
+            when.has_fields: 
+            - kubernetes.annotations.com_charleswhrowe_elastic_index
+          pipelines:
+          - pipeline: "%{[kubernetes.annotations.com_charleswhrowe_elastic_pipeline]}"
+            when.has_fields: 
+            - kubernetes.annotations.com_charleswhrowe_elastic_pipeline

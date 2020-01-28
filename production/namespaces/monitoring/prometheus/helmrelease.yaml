@@ -1,0 +1,113 @@
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  releaseName: prometheus
+  chart:
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    name: prometheus-operator
+    version: 8.4.0
+  values:
+    global:
+      rbac:
+        create: true
+        pspEnabled: true
+    
+    nameOverride: prometheus
+    fullnameOverride: prometheus
+
+    prometheus:
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: traefik
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts: 
+        - prometheus.charleswhrowe.com
+        tls:
+        - hosts:
+          - prometheus.charleswhrowe.com
+          secretName: prometheus-tls
+      prometheusSpec:
+        podMetadata:
+          annotations:
+            # Inject Vault auth agent sidecar
+            vault.hashicorp.com/agent-inject: "true"
+            vault.hashicorp.com/agent-pre-populate: "false"
+            vault.hashicorp.com/agent-configmap: prometheus-vault-agent-config
+            vault.hashicorp.com/agent-requests-cpu: 100m
+        replicas: 2
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 5Gi
+        # All service monitors in all namespaces
+        serviceMonitorSelector: {}
+        serviceMonitorSelectorNilUsesHelmValues: false
+        resources:
+          requests:
+            cpu: 250m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+    alertmanager: 
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: traefik
+          cert-manager.io/cluster-issuer: letsencrypt-staging
+        hosts: 
+        - alertmanager.charleswhrowe.com
+        tls:
+        - hosts:
+          - alertmanager.charleswhrowe.com
+          secretName: alertmanager-tls
+      enabled: true
+      alertmanagerSpec:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 250Mi
+          limits:
+            cpu: 500m
+            memory: 250Mi
+
+    kubeProxy:
+      # kube-proxy only listens on loopback (127.0.0.1) addr so not possible to 
+      # connect unless running with hostNetwork true
+      enabled: false
+    kubeDns:
+      enabled: true
+    coreDns:
+      enabled: false
+    # Control plane components not accessible on GKE
+    kubeScheduler:
+      enabled: false
+    kubeEtcd:
+      enabled: false
+    kubeControllerManager:
+      enabled: false
+
+    prometheus-node-exporter:
+      fullnameOverride: prometheus-node-exporter
+      nameOverride: prometheus-node-exporter
+      resources:
+        requests:
+          cpu: 50m
+          memory: 50Mi
+        limits:
+          cpu: 100m
+          memory: 100Mi
+    
+    kube-state-metrics:
+      fullnameOverride: kube-state-metrics
+      nameOverride: kube-state-metrics
+    
+    grafana:
+      enabled: false

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-influxdb
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app: influxdb
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: telegraf
+    ports:
+    - protocol: TCP
+      port: 8086
+  policyTypes:
+  - Ingress

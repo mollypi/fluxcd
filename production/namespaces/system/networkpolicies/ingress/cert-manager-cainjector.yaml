@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-cert-manager-cainjecctor
+  namespace: system
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/name: cainjector
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+      - protocol: TCP
+        port: 10250
+  policyTypes:
+  - Ingress

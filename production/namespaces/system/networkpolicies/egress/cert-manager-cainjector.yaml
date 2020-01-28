@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-cert-manager-cainjector
+  namespace: system
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/name: cainjector
+  egress:
+  # Apiserver
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+  policyTypes:
+  - Egress

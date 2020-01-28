@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: consul-gossip-key
+    namespace: consul
+type: Opaque
+data:
+    encrypt-key: ENC[AES256_GCM,data:iWkJbtncdeqADIfw/ElqKMs4evAVyXzlHJf3U3cRx9+bieO0YhM9P11dcvsQsP3xEVCclRUP9acrStvM,iv:/Rr/x2c/HNLjvIucrWMv43RxlGQKCdN6/hGTjYtlUUA=,tag:gVT2VybAVbpjAGhNNgk9eA==,type:str]
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/ck-gcp-training/locations/europe-west2/keyRings/sops-kr/cryptoKeys/flux
+        created_at: '2020-01-18T10:06:10Z'
+        enc: CiQAjWnWoENNaEwlkVLYpApVF/piOI2zI16IjLwtadCFoMfSroESSQDd/Axr3FhvSbcWtQXPCAr76QGbhPAnJYaFDXOkufpZB8pXrrTRN94NmsBmWIQkgog7FrkX6JVotvKG31iQDIyrG8W7zISurp4=
+    azure_kv: []
+    lastmodified: '2020-01-25T21:30:54Z'
+    mac: ENC[AES256_GCM,data:Mec4xHKkMOWSWGL4tbhdD/2cL3rm1AbwPk8LLaSqnWa0jYBE4BtYm66fYd0mxfH0fySyQp3lr4iYzKDbjNxvbPEnz8T+Lz3dFaQv2DGmVuJ8ymr+K+ZlUj3Ae4cgCXseLTjJgb1wfCQKHt+U9jqsbkRCuz+mHXI2wvWiIsnlv28=,iv:2IC5S+5sE+Z6LPn79MwcAAgUS6LR1SsviG1P1xiGkWE=,tag:sAdrqNCJUst5sIxwbtSmyA==,type:str]
+    pgp: []
+    encrypted_regex: ^data
+    version: 3.5.0

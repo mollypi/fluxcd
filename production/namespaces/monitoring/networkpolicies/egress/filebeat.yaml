@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-filebeat
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app: filebeat-filebeat
+  egress:
+  # Apiserver 
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+  
+  - to:
+    - podSelector:
+        matchLabels:
+          app: elasticsearch-master
+    ports:
+    - protocol: TCP
+      port: 9200
+  policyTypes:
+  - Egress

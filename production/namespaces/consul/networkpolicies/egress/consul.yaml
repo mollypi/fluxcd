@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-consul
+  namespace: consul
+spec:
+  podSelector: 
+    matchLabels:
+      app: consul
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: consul
+    ports:
+    - protocol: TCP
+      port: 8300
+    - protocol: TCP
+      port: 8301
+    - protocol: UDP
+      port: 8301
+  policyTypes:
+  - Egress

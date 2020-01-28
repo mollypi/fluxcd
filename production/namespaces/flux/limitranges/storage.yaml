@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit-storage
+  namespace: flux
+spec:
+  limits:
+  - type: PersistentVolumeClaim
+    max:
+      storage: 20Gi
+    min:
+      storage: 250Mi

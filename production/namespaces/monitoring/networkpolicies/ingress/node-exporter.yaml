@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-node-exporter
+  namespace: monitoring
+spec:
+  podSelector: 
+    matchLabels:
+      app: prometheus-node-exporter
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9100
+  policyTypes:
+  - Ingress

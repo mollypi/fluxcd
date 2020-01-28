@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: consul
+  namespace: consul
+  labels:
+    app: consul
+spec:
+  selector:
+    matchLabels:
+      app: consul-metrics
+  endpoints:
+  - port: metrics
+    path: /v1/agent/metrics
+    params:
+      format: 
+      - prometheus
+  jobLabel: consul

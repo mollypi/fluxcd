@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-velero
+  namespace: system
+spec:
+  podSelector: 
+    matchLabels:
+      app.kubernetes.io/instance: velero
+  egress:
+  # Apiserver
+  - to:
+    - ipBlock:
+        cidr: 172.16.0.0/28
+    ports:
+    - protocol: TCP
+      port: 443
+
+  # GKE metadata server
+  - to:
+    - ipBlock:
+        cidr: 127.0.0.1/32
+    ports:
+    - protocol: TCP
+      port: 988
+
+  # Internet for GCP APIs
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+          - 10.0.0.0/8
+    ports:
+    - protocol: TCP
+      port: 443
+  policyTypes:
+  - Egress

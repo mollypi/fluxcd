@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: flux-webhook
+  name: flux-webhook
+  namespace: flux
+spec:
+  rules:
+  - host: flux-webhook.charleswhrowe.com
+    http:
+      paths:
+      - backend:
+          serviceName: flux-webhook
+          servicePort: 8080
+        path: /hook/394d0db2bdb83db9d5d9349c56313f1d2dcd36d3addae9327254e7408578edd7
+  tls:
+  - hosts:
+    - flux-webhook.charleswhrowe.com
+    secretName: flux-webhook-tls

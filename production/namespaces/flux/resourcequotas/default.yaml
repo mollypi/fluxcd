@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: default
+  namespace: flux
+spec:
+  hard:
+    count/pods: "25"
+    count/deployments.apps: "10"
+    count/cronjobs.batch: "5"
+    count/services: "25"
+    count/services.loadbalancers: "5"
+    count/persistentvolumeclaims: "10"
+    requests.storage: 200Gi
