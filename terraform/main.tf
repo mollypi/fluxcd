@@ -91,10 +91,10 @@ resource "google_container_node_pool" "standard" {
   }
 
   node_config {
-    machine_type    = "n1-standard-2"
-    image_type      = "COS_CONTAINERD"
-    disk_size_gb    = "30"
-    preemptible     = false
+    machine_type = "n1-standard-2"
+    image_type   = "COS_CONTAINERD"
+    disk_size_gb = "30"
+    preemptible  = false
 
     workload_metadata_config {
       node_metadata = "GKE_METADATA_SERVER"

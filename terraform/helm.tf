@@ -1,11 +1,11 @@
 provider "helm" {
-  # kubernetes {
-  #   load_config_file = false
+  kubernetes {
+    load_config_file = false
 
-  #   host                   = google_container_cluster.cluster.endpoint
-  #   token                  = data.google_client_config.current.access_token
-  #   cluster_ca_certificate = base64decode(google_container_cluster.cluster.master_auth.0.cluster_ca_certificate)
-  # }
+    host                   = google_container_cluster.cluster.endpoint
+    token                  = data.google_client_config.current.access_token
+    cluster_ca_certificate = base64decode(google_container_cluster.cluster.master_auth.0.cluster_ca_certificate)
+  }
 }
 
 provider "kubernetes" {
@@ -29,7 +29,7 @@ resource "helm_release" "flux" {
   name       = "flux"
   repository = data.helm_repository.flux.metadata.0.name
   chart      = "flux"
-  version    = "1.1.0"
+  version    = "1.2.0"
   namespace  = "flux"
 
   values = [

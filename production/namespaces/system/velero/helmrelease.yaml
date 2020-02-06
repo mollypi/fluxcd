@@ -9,7 +9,7 @@ spec:
   chart:
     repository: https://vmware-tanzu.github.io/helm-charts
     name: velero
-    version: 2.8.1
+    version: 2.8.2
   values:
     rbac:
       create: true
@@ -17,7 +17,7 @@ spec:
     serviceAccount:
       server:
         annotations: 
-          serviceAccount: velero@ck-gcp-training.iam.gserviceaccount.com
+          iam.gke.io/gcp-service-account: velero@ck-gcp-training.iam.gserviceaccount.com
 
     configuration:
       provider: velero.io/gcp

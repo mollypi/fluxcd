@@ -2,9 +2,7 @@ rbac:
   create: true
 
 image:
-  repository: docker.io/fluxcd/flux-prerelease
-  tag: master-a144686f
-  # tag: 1.17.1
+  tag: 1.18.0
 
 git:
   url: git@github.com:rowecharles/fluxcd.git
@@ -22,7 +20,7 @@ syncGarbageCollection:
 
 additionalArgs:
 - --sops
-- --registry-scanning=false
+- --registry-disable-scanning
 
 annotations:
   com.charleswhrowe.elastic.index: flux
