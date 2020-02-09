@@ -1,5 +1,1 @@
-.gitsecret/keys/random_seed
-!*.secret
 
-terraform/k8s/flux_id_rsa
-terraform/k8s/github.key

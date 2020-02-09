@@ -1,1 +1,4 @@
 *.enc.yaml diff=sopsdiffer
+
+terraform/k8s/flux_id_rsa filter=git-crypt diff=git-crypt
+terraform/k8s/github.key filter=git-crypt diff=git-crypt
