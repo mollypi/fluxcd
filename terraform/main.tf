@@ -51,6 +51,7 @@ resource "google_container_cluster" "cluster" {
     # }
   }
 
+  enable_shielded_nodes = true
   pod_security_policy_config {
     enabled = false
   }
@@ -100,6 +101,11 @@ resource "google_container_node_pool" "standard" {
       node_metadata = "GKE_METADATA_SERVER"
     }
 
+    shielded_instance_config {
+      enable_secure_boot = true
+      enable_integrity_monitoring = true
+    }
+
     tags = ["gke-${google_container_cluster.cluster.name}", "standard-np"]
   }
 
@@ -107,4 +113,3 @@ resource "google_container_node_pool" "standard" {
     update = "60m"
   }
 }
-

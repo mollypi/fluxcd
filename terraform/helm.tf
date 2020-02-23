@@ -9,6 +9,7 @@ provider "helm" {
 }
 
 provider "kubernetes" {
+  version          = "1.10.0" # 1.11 broke https://github.com/terraform-providers/terraform-provider-kubernetes/issues/759
   load_config_file = false
 
   host                   = google_container_cluster.cluster.endpoint
@@ -43,7 +44,7 @@ resource "helm_release" "flux_helm_operator" {
   name       = "flux-helm-operator"
   repository = data.helm_repository.flux.metadata.0.name
   chart      = "helm-operator"
-  version    = "0.6.0"
+  version    = "0.7.0"
   namespace  = "flux"
 
   values = [

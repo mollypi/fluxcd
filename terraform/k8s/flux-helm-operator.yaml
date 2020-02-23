@@ -2,8 +2,6 @@
 rbac:
   create: true
 
-createCRD: true
-
 helm:
   versions: v3
 
