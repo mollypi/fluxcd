@@ -9,12 +9,10 @@ spec:
       app: flux
   ingress:
   - from:
-    - namespaceSelector:
-        matchLabels:
-          name: system
-      podSelector:
-        matchLabels:
-          app: traefik
+    - ipBlock:
+        cidr: 35.191.0.0/16
+    - ipBlock:
+        cidr: 130.211.0.0/22
     ports:
     - protocol: TCP
       port: 8080

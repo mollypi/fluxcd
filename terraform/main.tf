@@ -106,6 +106,11 @@ resource "google_container_node_pool" "standard" {
       enable_integrity_monitoring = true
     }
 
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/monitoring.write",
+    ]
+    
     tags = ["gke-${google_container_cluster.cluster.name}", "standard-np"]
   }
 
