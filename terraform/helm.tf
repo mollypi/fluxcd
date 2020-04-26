@@ -59,7 +59,6 @@ resource "kubernetes_namespace" "flux" {
     name = "flux"
     labels = {
       name            = "flux"
-      istio-injection = "enabled"
     }
   }
 }

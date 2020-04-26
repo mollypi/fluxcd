@@ -53,6 +53,8 @@ spec:
         # All service monitors in all namespaces
         serviceMonitorSelector: {}
         serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelector: {}
+        podMonitorSelectorNilUsesHelmValues: false
         resources:
           requests:
             cpu: 250m
