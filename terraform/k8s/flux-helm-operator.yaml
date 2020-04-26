@@ -2,6 +2,9 @@
 rbac:
   create: true
 
+image:
+  tag: 1.0.1
+
 helm:
   versions: v3
 

@@ -2,7 +2,7 @@ rbac:
   create: true
 
 image:
-  tag: 1.18.0
+  tag: 1.19.0
 
 git:
   url: git@github.com:rowecharles/fluxcd.git
