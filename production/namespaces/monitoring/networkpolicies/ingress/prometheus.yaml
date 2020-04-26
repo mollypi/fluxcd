@@ -16,6 +16,12 @@ spec:
     - podSelector:
         matchLabels:
           app: prometheus
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/instance: flagger
     ports:
     - protocol: TCP
       port: 9090
