@@ -1,0 +1,4 @@
+# fluxcd
+
+[![IaC](https://app.soluble.cloud/api/v1/public/badges/fcf7dbb4-69a8-4d7e-9c4b-14fe5d3679c4.svg?orgId=561911742905)](https://app.soluble.cloud/repos/details/github.com/mollypi/fluxcd?orgId=561911742905)  [![CIS](https://app.soluble.cloud/api/v1/public/badges/ba4079e7-a6af-44ad-9a44-54d5b95691bd.svg?orgId=561911742905)](https://app.soluble.cloud/repos/details/github.com/mollypi/fluxcd?orgId=561911742905)  [![Git](https://app.soluble.cloud/api/v1/public/badges/a7d54759-bdb0-4ea1-859d-3e35a225a69d.svg?orgId=561911742905)](https://app.soluble.cloud/repos/details/github.com/mollypi/fluxcd?orgId=561911742905)  [![HIPAA](https://app.soluble.cloud/api/v1/public/badges/de168af4-3780-4c92-8581-5f23aadcb879.svg?orgId=561911742905)](https://app.soluble.cloud/repos/details/github.com/mollypi/fluxcd?orgId=561911742905)  
+
